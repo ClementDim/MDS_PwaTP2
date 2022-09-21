@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test_db": "node test_db.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
