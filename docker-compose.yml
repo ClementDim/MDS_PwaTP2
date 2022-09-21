@@ -3,32 +3,35 @@ services:
   api:
     container_name: Api
     ports:
-      - "8080:8080"
+      - "8082:8080"
     image: 'node:alpine'
     working_dir: /home/node/app
     command:
       - /bin/sh
       - '-c'
-      - 'npm install && npm run test_db'
-      #- 'npm install && npm install -g serve && npm run build && serve -s build' # For prod testing
+      - './wait-for.sh mariadb:3306 -- npm i --save && npm run test_db'
+      #- ' npm i --save && npm run test_db'
     volumes:
       - './api:/home/node/app'
-    links:
+    depends_on:
       - mariadb
     networks:
-      - tp2
+      - backend
   mariadb:
     image: mariadb:latest
     container_name: Database
+    restart: always
     ports:
       - "3306:3306"
     environment:
       MYSQL_USER: "admin"
-      MYSQL_PASSWORD: "admin"
+      MYSQL_PASSWORD: "password"
       MYSQL_DATABASE: "db_tp2"
-      MYSQL_ROOT_PASSWORD: "admin"
+      MYSQL_ROOT_PASSWORD: "password"
     networks:
-      - tp2
+      - backend
+    expose:
+      - '3306'
   react:
     container_name: App
     image: 'node:latest'
@@ -42,9 +45,9 @@ services:
       - 'npm install && npm start'
       #- 'npm install && npm install -g serve && npm run build && serve -s build' # For prod testing
     ports:
-      - '8085:3000'
+      - '8081:3000'
     volumes:
       - './react-app:/home/node/app'
 networks:
-  tp2:
+  backend:
     driver: bridge
