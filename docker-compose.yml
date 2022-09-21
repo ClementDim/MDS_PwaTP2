@@ -1,14 +1,50 @@
 version: '3.6'
 services:
-  react:
-    container_name: node
-    image: 'node:latest'
+  api:
+    container_name: Api
+    ports:
+      - "8080:8080"
+    image: 'node:alpine'
     working_dir: /home/node/app
     command:
       - /bin/sh
       - '-c'
+      - 'npm install && npm run test_db'
+      #- 'npm install && npm install -g serve && npm run build && serve -s build' # For prod testing
+    volumes:
+      - './api:/home/node/app'
+    links:
+      - mariadb
+    networks:
+      - tp2
+  mariadb:
+    image: mariadb:latest
+    container_name: Database
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "admin"
+      MYSQL_DATABASE: "db_tp2"
+      MYSQL_ROOT_PASSWORD: "admin"
+    networks:
+      - tp2
+  react:
+    container_name: App
+    image: 'node:latest'
+    working_dir: /home/node/app
+    links:
+      - mariadb
+      - api
+    command:
+      - /bin/sh
+      - '-c'
       - 'npm install && npm start'
+      #- 'npm install && npm install -g serve && npm run build && serve -s build' # For prod testing
     ports:
       - '8085:3000'
     volumes:
       - './react-app:/home/node/app'
+networks:
+  tp2:
+    driver: bridge
