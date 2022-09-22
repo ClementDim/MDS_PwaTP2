@@ -3,7 +3,7 @@ services:
   api:
     container_name: Api
     ports:
-      - "8082:8080"
+      - "8080:3000"
     image: 'node:alpine'
     working_dir: /home/node/app
     command:
@@ -36,7 +36,7 @@ services:
     container_name: App
     image: 'node:latest'
     working_dir: /home/node/app
-    links:
+    depends_on:
       - mariadb
       - api
     command:
@@ -45,9 +45,11 @@ services:
       - 'npm install && npm start'
       #- 'npm install && npm install -g serve && npm run build && serve -s build' # For prod testing
     ports:
-      - '8081:3000'
+      - '80:3000'
     volumes:
       - './react-app:/home/node/app'
 networks:
   backend:
+    driver: bridge
+  frontend:
     driver: bridge
