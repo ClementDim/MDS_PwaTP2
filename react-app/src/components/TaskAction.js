@@ -1,10 +1,16 @@
 import React from "react";
 
 export const TaskAction = (props) => {
-  return (
+
+  const update = () => {
+    const new_title = prompt('Update title',props.data.title);
+    props.handler('update', props.data.id, {'title':new_title});
+  }
+
+return (
     <div id="taskActionContainer">
-      <input type="checkbox" id="horns" name="horns" onClick={() => props.handler('done', props.data.id)} checked={props.data.is_done}/>
-      <button className="btn btn-warning" onClick={() => props.handler('update', props.data.id)}>Modifier</button>
+      <input type="checkbox" onChange={() => props.handler('done', props.data.id, {'is_done': !props.data.is_done})} checked={props.data.is_done}/>
+      <button className="btn btn-warning" onClick={() => update()}>Modifier</button>
       <button className="btn btn-danger" onClick={() => props.handler('delete', props.data.id)}>Supprimer</button>
     </div>
   )
