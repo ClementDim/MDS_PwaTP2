@@ -24,26 +24,30 @@ app.get('/task/:id', (req, res) => {
   if(!req.params.id){
     res.status(404);
   }
-  Task.get(req.params).then(result => {res.status(200).send(result)});
+  Task.get(req.params).then(result => {res.send(result)});
 });
 // Create a task
 app.post('/task', (req, res) => {
   if(!req.body){
     res.status(404);
   }
-  Task.add(req.params, req.body).then(result => {res.status(200).send(result)});
+  Task.add(req.params, req.body).then(result => {res.send(result)});
 });
 // Update a task
 app.put('/task/:id', (req, res) => {
   if(!req.body || !req.params.id){
     res.status(404);
   }
-  Task.update(req.params, req.body).then(result => {res.status(200).send(result)});
+  Task.update(req.params, req.body).then(result => {res.send(result)});
 });
 // Remove a task
 app.delete('/task/:id',  (req, res) => {
   if(!req.params.id){
     res.status(404);
   }
-  Task.remove(req.params).then(result => {res.status(200).send(result)});
+  Task.remove(req.params).then(result => {res.send(result)});
+});
+
+app.delete('/task',  (req, res) => {
+  Task.remove(req.query).then(result => {res.send(result)});
 });

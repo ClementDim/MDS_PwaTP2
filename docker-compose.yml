@@ -42,8 +42,8 @@ services:
     command:
       - /bin/sh
       - '-c'
-      - 'npm install && npm start'
-      #- 'npm install && npm install -g serve && npm run build && serve -s build' # For prod testing
+      #- 'npm install && npm start'
+      - 'npm install && npm install -g serve && npm run build && serve -s build' # For prod testing
     ports:
       - '80:3000'
     volumes:

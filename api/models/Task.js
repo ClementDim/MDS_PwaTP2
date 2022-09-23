@@ -20,7 +20,6 @@ Task.init({
   },
   detail: {
     type: DataTypes.STRING,
-    allowNull: false
   },
   link: {
     type: DataTypes.STRING

@@ -9,8 +9,16 @@ class TaskController {
     return await task.update(data);
   }
   async remove(params){
-    const task = await Task.findByPk(params.id);
-    return task ? task.destroy() : null;
+    if(params.id){
+      const task = await Task.findByPk(params.id);
+      return task ? task.destroy() : null;
+    }
+    if(Object.keys(params).includes('is_done')){
+      await Task.destroy({
+        where: {'is_done': params.is_done === 'true' ? true : false}
+      });
+      return true;
+    }
   }
   async get(params){
     return await Task.findByPk(params.id);
